@@ -1,0 +1,288 @@
+{
+  "info": {
+    "name": "ms-cadastro-filiados - Filiados",
+    "description": "Colecao para teste manual da feature Cadastro de Filiado.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{accessToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "accessToken",
+      "value": ""
+    },
+    {
+      "key": "accessTokenFilial",
+      "value": ""
+    },
+    {
+      "key": "filialId",
+      "value": ""
+    },
+    {
+      "key": "filiadoId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Criar filiado",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/filiados",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "filiados"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nomeCompleto\": \"Joao Nakamura\",\n  \"dataNascimento\": \"1990-01-10\",\n  \"cpf\": \"123.456.789-00\",\n  \"email\": \"joao@email.com\",\n  \"telefone\": \"41999999999\",\n  \"sexo\": \"MASCULINO\",\n  \"filialId\": \"{{filialId}}\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const response = pm.response.json();",
+              "if (response.id) {",
+              "  pm.collectionVariables.set('filiadoId', response.id);",
+              "  pm.environment.set('filiadoId', response.id);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Listar filiados",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/filiados",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "filiados"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Listar filiados por filial",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/filiados?filialId={{filialId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "filiados"
+          ],
+          "query": [
+            {
+              "key": "filialId",
+              "value": "{{filialId}}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Buscar filiado por ID",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/filiados/{{filiadoId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "filiados",
+            "{{filiadoId}}"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Criar filiado como responsavel da propria filial",
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{accessTokenFilial}}",
+            "type": "string"
+          }
+        ]
+      },
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/filiados",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "filiados"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nomeCompleto\": \"Maria Nakamura\",\n  \"dataNascimento\": \"1992-04-20\",\n  \"email\": \"maria@email.com\",\n  \"filialId\": \"{{filialId}}\"\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const response = pm.response.json();",
+              "if (response.id) {",
+              "  pm.collectionVariables.set('filiadoId', response.id);",
+              "  pm.environment.set('filiadoId', response.id);",
+              "}"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Atualizar filiado",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/filiados/{{filiadoId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "filiados",
+            "{{filiadoId}}"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nomeCompleto\": \"Joao Silva Nakamura\",\n  \"dataNascimento\": \"1990-01-10\",\n  \"cpf\": \"123.456.789-00\",\n  \"email\": \"joao.silva@email.com\",\n  \"telefone\": \"41999999999\",\n  \"sexo\": \"MASCULINO\",\n  \"numeroInternacional\": null,\n  \"filialId\": \"{{filialId}}\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Atualizar foto de perfil",
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/filiados/{{filiadoId}}/foto-perfil",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "filiados",
+            "{{filiadoId}}",
+            "foto-perfil"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fotoPerfilUrl\": \"https://cdn.ikonbrasil.com.br/avatar/filiado-exemplo.jpg\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Ativar filiado",
+      "request": {
+        "method": "PATCH",
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/filiados/{{filiadoId}}/ativar",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "filiados",
+            "{{filiadoId}}",
+            "ativar"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Inativar filiado",
+      "request": {
+        "method": "PATCH",
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/filiados/{{filiadoId}}/inativar",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "filiados",
+            "{{filiadoId}}",
+            "inativar"
+          ]
+        }
+      }
+    }
+  ]
+}

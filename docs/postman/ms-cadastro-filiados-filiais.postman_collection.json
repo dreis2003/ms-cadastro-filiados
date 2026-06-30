@@ -1,0 +1,166 @@
+{
+  "info": {
+    "name": "ms-cadastro-filiados - Filiais",
+    "description": "Colecao para teste manual da feature Cadastro de Filial/Dojo.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{accessToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "accessToken",
+      "value": ""
+    },
+    {
+      "key": "accessTokenFilial",
+      "value": ""
+    },
+    {
+      "key": "filialId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Criar filial",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/filiais",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "filiais"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"nome\": \"Dojo Centro\",\n  \"codigo\": \"CENTRO\",\n  \"responsavel\": \"Responsavel Centro\",\n  \"cidade\": \"Curitiba\",\n  \"estado\": \"PR\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Listar filiais",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/filiais",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "filiais"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Buscar filial por ID - matriz",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/filiais/{{filialId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "filiais",
+            "{{filialId}}"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Buscar propria filial - responsavel",
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{accessTokenFilial}}",
+            "type": "string"
+          }
+        ]
+      },
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/filiais/{{filialId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "filiais",
+            "{{filialId}}"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Ativar filial",
+      "request": {
+        "method": "PATCH",
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/filiais/{{filialId}}/ativar",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "filiais",
+            "{{filialId}}",
+            "ativar"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Inativar filial",
+      "request": {
+        "method": "PATCH",
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/filiais/{{filialId}}/inativar",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "filiais",
+            "{{filialId}}",
+            "inativar"
+          ]
+        }
+      }
+    }
+  ]
+}
