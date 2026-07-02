@@ -5,6 +5,7 @@ import br.com.ikonbrasil.cadastrofiliados.compartilhado.dominio.objetoValor.Ende
 import br.com.ikonbrasil.cadastrofiliados.filiado.dominio.enumerador.Sexo;
 import br.com.ikonbrasil.cadastrofiliados.filiado.dominio.enumerador.StatusFiliado;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -21,6 +22,8 @@ public class Filiado {
     private String email;
     private String telefone;
     private Sexo sexo;
+    private Integer alturaCm;
+    private BigDecimal pesoKg;
     private String tipoSanguineo;
     private LocalDate dataInicioTreinamento;
     private String nacionalidade;
@@ -70,7 +73,7 @@ public class Filiado {
             LocalDateTime dataAtualizacao
     ) {
         this(id, nomeCompleto, nomeSocial, dataNascimento, cpf, rg, email, telefone, sexo,
-                null, null, null, null, null,
+                null, null, null, null, null, null, null,
                 null, null, null, null, null,
                 null,
                 null, null, null, null, null, null, null,
@@ -88,6 +91,8 @@ public class Filiado {
             String email,
             String telefone,
             Sexo sexo,
+            Integer alturaCm,
+            BigDecimal pesoKg,
             String tipoSanguineo,
             LocalDate dataInicioTreinamento,
             String nacionalidade,
@@ -120,8 +125,8 @@ public class Filiado {
     ) {
         this.id = Objects.requireNonNullElseGet(id, UUID::randomUUID);
         this.dataCadastro = Objects.requireNonNullElseGet(dataCadastro, LocalDateTime::now);
-        alterarDados(nomeCompleto, nomeSocial, dataNascimento, cpf, rg, email, telefone, sexo, tipoSanguineo,
-                dataInicioTreinamento, nacionalidade, naturalidade, profissao, responsavelNome, responsavelParentesco,
+        alterarDados(nomeCompleto, nomeSocial, dataNascimento, cpf, rg, email, telefone, sexo, alturaCm, pesoKg,
+                tipoSanguineo, dataInicioTreinamento, nacionalidade, naturalidade, profissao, responsavelNome, responsavelParentesco,
                 responsavelCpf, responsavelTelefone, responsavelEmail, dadosMedicos, parqPergunta1, parqPergunta2,
                 parqPergunta3, parqPergunta4, parqPergunta5, parqPergunta6, parqPergunta7, assinaturaNome,
                 declaracaoSaudeAceite, declaracaoSaudeAceiteIp, endereco, numeroInternacional, filialId);
@@ -146,9 +151,11 @@ public class Filiado {
             String numeroInternacional,
             UUID filialId
     ) {
-        alterarDados(nomeCompleto, nomeSocial, dataNascimento, cpf, rg, email, telefone, sexo, null, null, null, null, null,
-                null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, endereco,
-                numeroInternacional, filialId);
+        alterarDados(nomeCompleto, nomeSocial, dataNascimento, cpf, rg, email, telefone, sexo,
+                null, null, null, null, null, null, null,
+                null, null, null, null, null, null,
+                null, null, null, null, null, null, null,
+                null, null, null, endereco, numeroInternacional, filialId);
     }
 
     public void alterarDados(
@@ -160,6 +167,8 @@ public class Filiado {
             String email,
             String telefone,
             Sexo sexo,
+            Integer alturaCm,
+            BigDecimal pesoKg,
             String tipoSanguineo,
             LocalDate dataInicioTreinamento,
             String nacionalidade,
@@ -201,6 +210,8 @@ public class Filiado {
         this.email = normalizarTextoOpcional(email);
         this.telefone = normalizarTextoOpcional(telefone);
         this.sexo = Objects.requireNonNullElse(sexo, Sexo.NAO_INFORMADO);
+        this.alturaCm = validarAlturaCm(alturaCm);
+        this.pesoKg = validarPesoKg(pesoKg);
         this.tipoSanguineo = normalizarTextoOpcional(tipoSanguineo);
         this.dataInicioTreinamento = dataInicioTreinamento;
         this.nacionalidade = normalizarTextoOpcional(nacionalidade);
@@ -281,6 +292,29 @@ public class Filiado {
         return valor.replaceAll("\\D", "");
     }
 
+    private static Integer validarAlturaCm(Integer valor) {
+        if (valor == null) {
+            return null;
+        }
+        if (valor < 40 || valor > 250) {
+            throw new ExcecaoDeDominio("Altura deve estar entre 40 e 250 centimetros");
+        }
+        return valor;
+    }
+
+    private static BigDecimal validarPesoKg(BigDecimal valor) {
+        if (valor == null) {
+            return null;
+        }
+        if (valor.compareTo(new BigDecimal("1.0")) < 0 || valor.compareTo(new BigDecimal("300.0")) > 0) {
+            throw new ExcecaoDeDominio("Peso deve estar entre 1,0 e 300,0 kg");
+        }
+        if (valor.scale() > 1) {
+            throw new ExcecaoDeDominio("Peso deve ter no maximo 1 casa decimal");
+        }
+        return valor;
+    }
+
     public UUID getId() {
         return id;
     }
@@ -315,6 +349,14 @@ public class Filiado {
 
     public Sexo getSexo() {
         return sexo;
+    }
+
+    public Integer getAlturaCm() {
+        return alturaCm;
+    }
+
+    public BigDecimal getPesoKg() {
+        return pesoKg;
     }
 
     public String getTipoSanguineo() {

@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -43,6 +44,12 @@ public class FiliadoJpaEntity {
 
     @Column(length = 30)
     private String sexo;
+
+    @Column(name = "altura_cm")
+    private Integer alturaCm;
+
+    @Column(name = "peso_kg", precision = 5, scale = 1)
+    private BigDecimal pesoKg;
 
     @Column(name = "tipo_sanguineo", length = 3)
     private String tipoSanguineo;
@@ -163,6 +170,8 @@ public class FiliadoJpaEntity {
             String email,
             String telefone,
             String sexo,
+            Integer alturaCm,
+            BigDecimal pesoKg,
             String tipoSanguineo,
             LocalDate dataInicioTreinamento,
             String nacionalidade,
@@ -208,6 +217,8 @@ public class FiliadoJpaEntity {
         this.email = email;
         this.telefone = telefone;
         this.sexo = sexo;
+        this.alturaCm = alturaCm;
+        this.pesoKg = pesoKg;
         this.tipoSanguineo = tipoSanguineo;
         this.dataInicioTreinamento = dataInicioTreinamento;
         this.nacionalidade = nacionalidade;
@@ -279,6 +290,14 @@ public class FiliadoJpaEntity {
 
     public String getSexo() {
         return sexo;
+    }
+
+    public Integer getAlturaCm() {
+        return alturaCm;
+    }
+
+    public BigDecimal getPesoKg() {
+        return pesoKg;
     }
 
     public String getTipoSanguineo() {

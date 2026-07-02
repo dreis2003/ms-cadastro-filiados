@@ -4,6 +4,7 @@ import br.com.ikonbrasil.cadastrofiliados.compartilhado.dominio.objetoValor.Ende
 import br.com.ikonbrasil.cadastrofiliados.filiado.dominio.entidade.Filiado;
 import br.com.ikonbrasil.cadastrofiliados.filiado.dominio.enumerador.Sexo;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -20,6 +21,8 @@ public interface CriarFiliadoUseCase {
             String email,
             String telefone,
             Sexo sexo,
+            Integer alturaCm,
+            BigDecimal pesoKg,
             String tipoSanguineo,
             LocalDate dataInicioTreinamento,
             String nacionalidade,
@@ -61,7 +64,7 @@ public interface CriarFiliadoUseCase {
                 UUID filialId
         ) {
             this(nomeCompleto, nomeSocial, dataNascimento, cpf, rg, email, telefone, sexo,
-                    null, null, null, null, null, null, null, null, null, null, null,
+                    null, null, null, null, null, null, null, null, null, null, null, null, null,
                     false, false, false, false, false, false, false,
                     nomeCompleto, true, null, endereco, numeroInternacional, fotoPerfilUrl, filialId);
         }

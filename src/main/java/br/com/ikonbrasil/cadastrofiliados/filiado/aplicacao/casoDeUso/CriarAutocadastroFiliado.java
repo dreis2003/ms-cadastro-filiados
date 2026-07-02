@@ -38,6 +38,8 @@ public class CriarAutocadastroFiliado implements CriarAutocadastroFiliadoUseCase
                 comando.email(),
                 comando.telefone(),
                 comando.sexo(),
+                comando.alturaCm(),
+                comando.pesoKg(),
                 comando.tipoSanguineo(),
                 comando.dataInicioTreinamento(),
                 comando.nacionalidade(),

@@ -36,6 +36,8 @@ public class CriarFiliado implements CriarFiliadoUseCase {
                 comando.email(),
                 comando.telefone(),
                 comando.sexo(),
+                comando.alturaCm(),
+                comando.pesoKg(),
                 comando.tipoSanguineo(),
                 comando.dataInicioTreinamento(),
                 comando.nacionalidade(),

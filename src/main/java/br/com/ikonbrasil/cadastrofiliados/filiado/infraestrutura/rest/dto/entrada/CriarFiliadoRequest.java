@@ -7,8 +7,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -35,6 +41,12 @@ public record CriarFiliadoRequest(
         String telefone,
 
         Sexo sexo,
+
+        @Min(40) @Max(250)
+        Integer alturaCm,
+
+        @DecimalMin("1.0") @DecimalMax("300.0") @Digits(integer = 3, fraction = 1)
+        BigDecimal pesoKg,
 
         @Size(max = 3)
         String tipoSanguineo,

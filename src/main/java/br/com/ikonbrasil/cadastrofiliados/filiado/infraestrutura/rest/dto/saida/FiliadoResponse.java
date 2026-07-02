@@ -1,5 +1,6 @@
 package br.com.ikonbrasil.cadastrofiliados.filiado.infraestrutura.rest.dto.saida;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -13,6 +14,8 @@ public record FiliadoResponse(
         String email,
         String telefone,
         String sexo,
+        Integer alturaCm,
+        BigDecimal pesoKg,
         String tipoSanguineo,
         LocalDate dataInicioTreinamento,
         String nacionalidade,

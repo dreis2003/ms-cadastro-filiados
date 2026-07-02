@@ -41,6 +41,8 @@ public class AtualizarFiliado implements AtualizarFiliadoUseCase {
                 comando.email(),
                 comando.telefone(),
                 comando.sexo(),
+                comando.alturaCm(),
+                comando.pesoKg(),
                 comando.tipoSanguineo(),
                 comando.dataInicioTreinamento(),
                 comando.nacionalidade(),
