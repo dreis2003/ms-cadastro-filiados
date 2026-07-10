@@ -4,11 +4,14 @@ import br.com.ikonbrasil.cadastrofiliados.filiado.infraestrutura.banco.entidade.
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface FiliadoJpaRepository extends JpaRepository<FiliadoJpaEntity, UUID> {
 
     boolean existsByCpf(String cpf);
+
+    Optional<FiliadoJpaEntity> findByCpf(String cpf);
 
     boolean existsByNumeroInternacional(String numeroInternacional);
 

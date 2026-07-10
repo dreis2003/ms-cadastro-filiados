@@ -10,6 +10,7 @@ import br.com.ikonbrasil.cadastrofiliados.filiado.aplicacao.porta.entrada.CriarF
 import br.com.ikonbrasil.cadastrofiliados.filiado.aplicacao.porta.entrada.InativarFiliadoUseCase;
 import br.com.ikonbrasil.cadastrofiliados.filiado.aplicacao.porta.entrada.ListarFiliadosUseCase;
 import br.com.ikonbrasil.cadastrofiliados.filiado.aplicacao.porta.entrada.ListarFiliadosPendentesUseCase;
+import br.com.ikonbrasil.cadastrofiliados.filiado.aplicacao.porta.saida.RepositorioFiliado;
 import br.com.ikonbrasil.cadastrofiliados.filiado.dominio.entidade.Filiado;
 import br.com.ikonbrasil.cadastrofiliados.filiado.infraestrutura.rest.mapper.FiliadoRestMapper;
 import br.com.ikonbrasil.cadastrofiliados.seguranca.infraestrutura.configuracao.ConfiguracaoSeguranca;
@@ -71,6 +72,9 @@ class FiliadoControllerTest {
 
     @MockitoBean
     private InativarFiliadoUseCase inativarFiliadoUseCase;
+
+    @MockitoBean
+    private RepositorioFiliado repositorioFiliado;
 
     @Test
     void deveCriarFiliadoComoMatrizAdmin() throws Exception {

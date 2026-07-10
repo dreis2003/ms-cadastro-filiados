@@ -17,7 +17,9 @@ import br.com.ikonbrasil.cadastrofiliados.filiado.infraestrutura.rest.dto.entrad
 import br.com.ikonbrasil.cadastrofiliados.filiado.infraestrutura.rest.dto.entrada.AtualizarFotoPerfilFiliadoRequest;
 import br.com.ikonbrasil.cadastrofiliados.filiado.infraestrutura.rest.dto.entrada.CriarFiliadoRequest;
 import br.com.ikonbrasil.cadastrofiliados.filiado.infraestrutura.rest.dto.saida.FiliadoResponse;
+import br.com.ikonbrasil.cadastrofiliados.filiado.infraestrutura.rest.dto.saida.FiliadoResumoPublicoResponse;
 import br.com.ikonbrasil.cadastrofiliados.filiado.infraestrutura.rest.mapper.FiliadoRestMapper;
+import br.com.ikonbrasil.cadastrofiliados.filiado.aplicacao.porta.saida.RepositorioFiliado;
 import br.com.ikonbrasil.cadastrofiliados.seguranca.infraestrutura.autenticacao.AutenticacaoAtual;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -58,6 +60,7 @@ public class FiliadoController {
     private final AtivarFiliadoUseCase ativarFiliadoUseCase;
     private final InativarFiliadoUseCase inativarFiliadoUseCase;
     private final FiliadoRestMapper filiadoRestMapper;
+    private final RepositorioFiliado repositorioFiliado;
 
     public FiliadoController(
             CriarFiliadoUseCase criarFiliadoUseCase,
@@ -70,7 +73,8 @@ public class FiliadoController {
             AprovarFiliadoPendenteUseCase aprovarFiliadoPendenteUseCase,
             AtivarFiliadoUseCase ativarFiliadoUseCase,
             InativarFiliadoUseCase inativarFiliadoUseCase,
-            FiliadoRestMapper filiadoRestMapper
+            FiliadoRestMapper filiadoRestMapper,
+            RepositorioFiliado repositorioFiliado
     ) {
         this.criarFiliadoUseCase = criarFiliadoUseCase;
         this.criarAutocadastroFiliadoUseCase = criarAutocadastroFiliadoUseCase;
@@ -83,6 +87,7 @@ public class FiliadoController {
         this.ativarFiliadoUseCase = ativarFiliadoUseCase;
         this.inativarFiliadoUseCase = inativarFiliadoUseCase;
         this.filiadoRestMapper = filiadoRestMapper;
+        this.repositorioFiliado = repositorioFiliado;
     }
 
     @PostMapping("/publico/filiais/{filialId}/autocadastro")
@@ -100,6 +105,21 @@ public class FiliadoController {
         return ResponseEntity
                 .created(URI.create("/api/v1/filiados/" + filiado.getId()))
                 .body(filiadoRestMapper.paraResponse(filiado));
+    }
+
+    @GetMapping("/publico/por-cpf")
+    @Operation(summary = "Consulta publica minima de filiado por CPF")
+    public ResponseEntity<FiliadoResumoPublicoResponse> buscarPublicoPorCpf(@RequestParam String cpf) {
+        Filiado filiado = repositorioFiliado.buscarPorCpf(cpf)
+                .orElseThrow(() -> new RegraDeNegocioException("Nao foi possivel validar os dados informados"));
+        return ResponseEntity.ok(FiliadoResumoPublicoResponse.de(filiado));
+    }
+
+    @GetMapping("/publico/{id}")
+    @Operation(summary = "Consulta publica minima de filiado por ID")
+    public ResponseEntity<FiliadoResumoPublicoResponse> buscarPublicoPorId(@PathVariable UUID id) {
+        Filiado filiado = buscarFiliadoPorIdUseCase.executar(id);
+        return ResponseEntity.ok(FiliadoResumoPublicoResponse.de(filiado));
     }
 
     @PostMapping

@@ -20,7 +20,11 @@ import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.web.BearerTokenResolver;
+import org.springframework.security.oauth2.server.resource.web.DefaultBearerTokenResolver;
 import org.springframework.security.web.SecurityFilterChain;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 @Configuration
 @EnableWebSecurity
@@ -44,8 +48,16 @@ public class ConfiguracaoSeguranca {
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
-                .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())))
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .bearerTokenResolver(bearerTokenResolver())
+                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter())))
                 .build();
+    }
+
+    @Bean
+    BearerTokenResolver bearerTokenResolver() {
+        DefaultBearerTokenResolver resolver = new DefaultBearerTokenResolver();
+        return request -> ehRotaPublica(request) ? null : resolver.resolve(request);
     }
 
     @Bean
@@ -78,5 +90,15 @@ public class ConfiguracaoSeguranca {
                     .forEach(authorities::add);
         }
         return authorities;
+    }
+
+    private boolean ehRotaPublica(HttpServletRequest request) {
+        String uri = request.getRequestURI();
+        return uri.startsWith("/api/v1/filiados/publico/")
+                || uri.startsWith("/actuator/health")
+                || uri.equals("/actuator/info")
+                || uri.startsWith("/swagger-ui/")
+                || uri.equals("/swagger-ui.html")
+                || uri.startsWith("/v3/api-docs");
     }
 }

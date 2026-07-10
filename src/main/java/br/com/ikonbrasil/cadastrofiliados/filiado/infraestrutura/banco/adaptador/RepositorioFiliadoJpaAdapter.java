@@ -42,6 +42,11 @@ public class RepositorioFiliadoJpaAdapter implements RepositorioFiliado {
     }
 
     @Override
+    public Optional<Filiado> buscarPorCpf(String cpf) {
+        return filiadoJpaRepository.findByCpf(normalizarCpf(cpf)).map(filiadoJpaMapper::paraDominio);
+    }
+
+    @Override
     public List<Filiado> listar() {
         return filiadoJpaRepository.findAll().stream().map(filiadoJpaMapper::paraDominio).toList();
     }
@@ -67,7 +72,7 @@ public class RepositorioFiliadoJpaAdapter implements RepositorioFiliado {
 
     @Override
     public boolean existePorCpf(String cpf) {
-        return filiadoJpaRepository.existsByCpf(cpf);
+        return filiadoJpaRepository.existsByCpf(normalizarCpf(cpf));
     }
 
     @Override
@@ -77,11 +82,15 @@ public class RepositorioFiliadoJpaAdapter implements RepositorioFiliado {
 
     @Override
     public boolean existePorCpfEmOutroFiliado(String cpf, UUID filiadoId) {
-        return filiadoJpaRepository.existsByCpfAndIdNot(cpf, filiadoId);
+        return filiadoJpaRepository.existsByCpfAndIdNot(normalizarCpf(cpf), filiadoId);
     }
 
     @Override
     public boolean existePorNumeroInternacionalEmOutroFiliado(String numeroInternacional, UUID filiadoId) {
         return filiadoJpaRepository.existsByNumeroInternacionalAndIdNot(numeroInternacional, filiadoId);
+    }
+
+    private static String normalizarCpf(String cpf) {
+        return cpf == null ? null : cpf.replaceAll("\\D", "");
     }
 }

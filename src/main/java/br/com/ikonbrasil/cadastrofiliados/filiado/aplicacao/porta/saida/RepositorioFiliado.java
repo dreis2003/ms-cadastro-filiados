@@ -13,6 +13,8 @@ public interface RepositorioFiliado {
 
     Optional<Filiado> buscarPorId(UUID id);
 
+    Optional<Filiado> buscarPorCpf(String cpf);
+
     List<Filiado> listar();
 
     List<Filiado> listarPorFilial(UUID filialId);
